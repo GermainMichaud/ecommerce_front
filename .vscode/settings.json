@@ -1,0 +1,12 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.ts, ${capture}.stories.ts, ${capture}.test.ts, ${capture}.spec.ts, ${capture}.css",
+    "*.tsx": "${capture}.tsx, ${capture}.stories.tsx, ${capture}.test.tsx, ${capture}.spec.tsx, ${capture}.css",
+    "tsconfig.json": "tsconfig.*.json",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml"
+  }
+}
