@@ -6,12 +6,12 @@
 
 ## Summary
 
-- [Getting started](#Getting_started)
-  - [Clone Repository](#Clone_the_repository)
-  - [Install dependencies](#Install_dependencies)
-  - [Run the project in `DEV` mode](#Run_the_project_in_DEV_mode)
-  - [Run the project in `PRODUCTION` mode](#Run_the_project_in_PRODUCTION_mode)
-  - [Run tests](#Run_tests)
+- [Getting started](#Getting-started)
+  - [Clone Repository](#Clone-the-repository)
+  - [Install dependencies](#Install-dependencies)
+  - [Run the project in `DEV` mode](#Run-the-project-in-DEV-mode)
+  - [Run the project in `PRODUCTION` mode](#Run-the-project-in-PRODUCTION-mode)
+  - [Run tests](#Run-tests)
 
 ---
 
