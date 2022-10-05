@@ -1,48 +1,99 @@
+import { PreloadedState } from '@reduxjs/toolkit';
 import { createMemoryHistory, ReactLocation, Router } from '@tanstack/react-location';
-import { render } from '@testing-library/react';
+import { render, RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactElement } from 'react';
 import { Provider } from 'react-redux';
+import { vi } from 'vitest';
 
 import { routes } from '../routes';
-import { createStore } from '../store';
+import { AppStore, RootState, setupStore } from '../store';
 
-const history = createMemoryHistory();
-const location = new ReactLocation({ history });
+export const user = userEvent.setup();
+
+interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
+  preloadedState?: PreloadedState<RootState>;
+  store?: AppStore;
+  initialEntries?: string[];
+}
 
 export const renderWithStore = (
   ui: ReactElement,
-  { store = createStore(), ...options },
+  {
+    preloadedState = {},
+    store = setupStore(preloadedState),
+    ...options
+  }: ExtendedRenderOptions = {} as ExtendedRenderOptions,
 ) => ({
-  store,
   ...render(ui, {
     wrapper: ({ children }): JSX.Element => <Provider store={store}>{children}</Provider>,
     ...options,
   }),
 });
 
-export const renderWithRouter = (ui: ReactElement, options = {}) =>
-  render(ui, {
-    wrapper: ({ children }) => (
-      <Router location={location} routes={routes}>
-        {children}
-      </Router>
-    ),
-    ...options,
-  });
-
-export const renderWithAllProviders = (ui: ReactElement, options = {}) =>
-  render(ui, {
-    wrapper: ({ children }) => (
-      <Provider store={createStore()}>
+export const renderWithRouter = (
+  ui: ReactElement,
+  { initialEntries = ['/'], options = {} },
+) => {
+  const history = createMemoryHistory({ initialEntries });
+  const location = new ReactLocation({ history });
+  return {
+    ...render(ui, {
+      wrapper: ({ children }) => (
         <Router location={location} routes={routes}>
           {children}
         </Router>
-      </Provider>
-    ),
-    ...options,
-  });
+      ),
+      ...options,
+    }),
+  };
+};
 
-export const user = userEvent.setup();
+export const renderWithAllProviders = (
+  ui: ReactElement,
+  {
+    preloadedState = {},
+    store = setupStore(preloadedState),
+    initialEntries = ['/'],
+    ...options
+  }: ExtendedRenderOptions = {} as ExtendedRenderOptions,
+) => {
+  const history = createMemoryHistory({ initialEntries });
+  const location = new ReactLocation({ history });
+  return {
+    ...render(ui, {
+      wrapper: ({ children }) => (
+        <Provider store={store}>
+          <Router location={location} routes={routes}>
+            {children}
+          </Router>
+        </Provider>
+      ),
+      ...options,
+    }),
+  };
+};
+
+export const mockAppStore = () => {
+  vi.mock('../store', async () => {
+    const mockStore = await vi.importActual<typeof import('../store')>('../store');
+    return {
+      ...mockStore,
+      useAppSelector: () => ({}),
+    };
+  });
+};
+
+export const mockUseMatch = () => {
+  vi.mock('@tanstack/react-location', async () => {
+    const mockRouter = await vi.importActual<typeof import('@tanstack/react-location')>(
+      '@tanstack/react-location',
+    );
+    return {
+      ...mockRouter,
+      useMatch: () => ({ params: {} }),
+    };
+  });
+};
 
 export * from '@testing-library/react';

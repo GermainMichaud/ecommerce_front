@@ -10,11 +10,15 @@ import {
 describe('test-utils', () => {
   it('should render component with store', () => {
     expect(typeof renderWithStore).toBe('function');
-    expect(renderWithStore(<div />, { store: undefined })).toBeTruthy();
+    expect(renderWithStore(<div />)).toBeTruthy();
   });
   it('should render component with router', () => {
     expect(typeof renderWithRouter).toBe('function');
-    expect(renderWithRouter(<div />)).toBeTruthy();
+    expect(
+      renderWithRouter(<div />, {
+        initialEntries: ['/'],
+      }),
+    ).toBeTruthy();
   });
   it('should render component with all providers', () => {
     expect(typeof renderWithAllProviders).toBe('function');
