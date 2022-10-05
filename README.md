@@ -37,6 +37,10 @@ yarn
 pnpm install
 ```
 
+### Set the env file
+
+> Create a `.env.local` file and set the API endpoint `VITE_API_URL=`
+
 ### Run the project in `DEV` mode
 
 ```sh
